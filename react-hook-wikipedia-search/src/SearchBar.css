@@ -1,0 +1,10 @@
+.result{
+    display: flex;
+    flex-direction: column;
+}
+
+.snippet{
+    padding: 10px;
+    border: none;
+    border-bottom: 1px solid #d3d3d3;
+}
