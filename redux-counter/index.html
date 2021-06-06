@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redux simple app</title>
+    <script src="https://unpkg.com/redux@latest/dist/redux.min.js"></script>
+</head>
+<body>
+    <p id="val"></p>
+    <button id="increment">Increment</button>
+    <button id="decrement">decrement</button>
+    <script>
+        let initialState = { val:0 };
+
+        function counterReducer(state=initialState, action){
+            switch(action.type){
+                case "INCREMENT":
+                    return { ...state, val:action.payload };
+                case "DECREMENT":
+                    return { ...state, val:action.payload };
+                default:
+                    return state;
+            }
+        }
+
+        const store = Redux.createStore(counterReducer);
+
+        function render(){
+            const state = store.getState();
+            document.querySelector('#val').innerHTML = state.val.toString();
+        }
+
+        render();
+
+        store.subscribe(render);
+
+        document.querySelector('#increment').addEventListener('click', () => {
+            store.dispatch({ type:"INCREMENT",payload:parseInt(document.querySelector('#val').innerHTML)+1 });
+        });
+
+        document.querySelector('#decrement').addEventListener('click', () => {
+            store.dispatch({ type:"DECREMENT",payload:parseInt(document.querySelector('#val').innerHTML)-1 });
+        });
+    </script>
+</body>
+</html>
