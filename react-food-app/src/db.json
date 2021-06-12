@@ -1,0 +1,67 @@
+{
+    "menu": [
+      {
+        "name": "Chicken kasha",
+        "description": "Delicious chicken kasha",
+        "price": 100,
+        "id": 1
+      },
+      {
+        "name": "Mutton Kasha",
+        "description": "Aromatic Mutton Kasha",
+        "price": 130,
+        "id": 2
+      },
+      {
+        "name": "Roti",
+        "description": "Warm and soft roti",
+        "price": 5,
+        "id": 3
+      },
+      {
+        "name": "Rice",
+        "description": "Basmati rice",
+        "price": 11,
+        "id": 4
+      }
+    ],
+    "cart": {
+      "menus": [
+        {
+          "name": "Chicken kasha",
+          "description": "Delicious chicken kasha",
+          "price": 100,
+          "id": 1,
+          "quantity": 1
+        },
+        {
+          "name": "Mutton Kasha",
+          "description": "Aromatic Mutton Kasha",
+          "price": 130,
+          "id": 2,
+          "quantity": 1
+        }
+      ],
+      "total": 230
+    },
+    "order": {
+      "menus": [
+        {
+          "name": "Chicken kasha",
+          "description": "Delicious chicken kasha",
+          "price": 100,
+          "id": 1,
+          "quantity": 2
+        },
+        {
+          "name": "Mutton Kasha",
+          "description": "Aromatic Mutton Kasha",
+          "price": 130,
+          "id": 2,
+          "quantity": 1
+        }
+      ],
+      "total": 330,
+      "orderDate": "Sat Jun 12 2021 13:24:23 GMT+0530 (India Standard Time)"
+    }
+  }

@@ -4,44 +4,37 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redux simple app</title>
+    <title>Document</title>
     <script src="https://unpkg.com/redux@latest/dist/redux.min.js"></script>
 </head>
 <body>
     <p id="val"></p>
     <button id="increment">Increment</button>
-    <button id="decrement">decrement</button>
+    <button id="decrement">Decrement</button>
     <script>
-        let initialState = { val:0 };
+        let val = document.querySelector('#val');
+        let increment = document.querySelector('#increment');
+        let decrement = document.querySelector('#decrement');
 
-        function counterReducer(state=initialState, action){
+        let initialState = { val:0 };
+        function reducer(state=initialState, action){
             switch(action.type){
-                case "INCREMENT":
-                    return { ...state, val:action.payload };
-                case "DECREMENT":
-                    return { ...state, val:action.payload };
-                default:
-                    return state;
+                case 'increment': return { ...state, val:parseInt(action.payload)+1 };
+                case 'decrement': return { ...state, val:parseInt(action.payload)-1 };
+                default:return state;
             }
         }
+        let store = Redux.createStore(reducer);
 
-        const store = Redux.createStore(counterReducer);
+        val.innerHTML = store.getState().val;
+        store.subscribe(() => val.innerHTML = store.getState().val);
 
-        function render(){
-            const state = store.getState();
-            document.querySelector('#val').innerHTML = state.val.toString();
-        }
-
-        render();
-
-        store.subscribe(render);
-
-        document.querySelector('#increment').addEventListener('click', () => {
-            store.dispatch({ type:"INCREMENT",payload:parseInt(document.querySelector('#val').innerHTML)+1 });
+        increment.addEventListener('click', () => {
+            store.dispatch({ type:'increment', payload:val.innerHTML});
         });
 
-        document.querySelector('#decrement').addEventListener('click', () => {
-            store.dispatch({ type:"DECREMENT",payload:parseInt(document.querySelector('#val').innerHTML)-1 });
+        decrement.addEventListener('click', () => {
+            store.dispatch({ type:'decrement', payload:val.innerHTML});
         });
     </script>
 </body>
