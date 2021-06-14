@@ -11,6 +11,11 @@
     <div id="synonym"></div>
     <div id="example"></div>
     <div id="definition"></div>
+    <div id="moredefinition"></div>
+    <div id="examhistory"></div>
+    <div id="difficulty"></div>
+    <div id="association"></div>
+    <div id="moreexample"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="module">
@@ -129,6 +134,12 @@ let antonym = [];
 let synonym = [];
 let example = [];
 let definition = [];
+let moredefinition = [];
+let examhistory = [];
+let difficulty = [];
+let association = [];
+let moreexample = [];
+
         for(let w of wordArr) {
             // try{
             //     let response = await fetch(`https://wordsapiv1.p.rapidapi.com/words/${w}/antonyms`, {
@@ -186,20 +197,139 @@ let definition = [];
             // }
             
             
+            // try{
+            //     let responseExm = await fetch(`https://wordsapiv1.p.rapidapi.com/words/${w}/definitions`, {
+            //         "method": "GET",
+            //         "headers": {
+            //             "x-rapidapi-key": "",
+            //             "x-rapidapi-host": "wordsapiv1.p.rapidapi.com"
+            //         }
+            //     });
+            //     let dataDef = await responseExm.json();
+            //     console.log(dataDef);
+            //     definition.push({word:w, definition:dataDef.definitions});
+            // }
+            // catch(err){
+            //     console.log('Definition');
+            //     console.log(w);
+            //     console.log(err);
+            // }
+
+
+            // try{
+            //     const options = {
+            //             method: 'POST',
+            //             url: 'https://xf-english-dictionary1.p.rapidapi.com/v1/dictionary',
+            //             params: {selection: `${w}`},
+            //             headers: {
+            //                 'content-type': 'application/json',
+            //                 'x-rapidapi-key': '9a0085c5bemshbd923100003a54cp18123bjsn1433795ff3fe',
+            //                 'x-rapidapi-host': 'xf-english-dictionary1.p.rapidapi.com'
+            //             },
+            //             data: {selection: `${w}`}
+            //         };
+            //     let dataMoreDefinition = await axios.request(options)
+                
+
+            //     //let dataMoreDefinition = await responseMoreDefinition.json();
+            //     console.log(dataMoreDefinition.data);
+            //     moredefinition.push({word:w, moredefinition:dataMoreDefinition.data.items.map(i => i.definitions)});
+            // }
+            // catch(err){
+            //     console.log('More Definition');
+            //     console.log(w);
+            //     console.log(err);
+            // }
+
+            
             try{
-                let responseExm = await fetch(`https://wordsapiv1.p.rapidapi.com/words/${w}/definitions`, {
-                    "method": "GET",
-                    "headers": {
-                        "x-rapidapi-key": "",
-                        "x-rapidapi-host": "wordsapiv1.p.rapidapi.com"
-                    }
-                });
-                let dataDef = await responseExm.json();
-                console.log(dataDef);
-                definition.push({word:w, definition:dataDef.definitions});
+                const options = {
+                        method: 'GET',
+                        url: 'https://twinword-word-graph-dictionary.p.rapidapi.com/examhistory/',
+                        params: {entry: `${w}`},
+                        headers: {
+                            'x-rapidapi-key': '9a0085c5bemshbd923100003a54cp18123bjsn1433795ff3fe',
+                            'x-rapidapi-host': 'twinword-word-graph-dictionary.p.rapidapi.com'
+                        }
+                    };
+                let data = await axios.request(options)
+                
+
+                //let dataMoreDefinition = await responseMoreDefinition.json();
+                console.log(data.data);
+                examhistory.push({word:w, examhistory:data.data.exam.join(',')});
             }
             catch(err){
-                console.log('Definition');
+                console.log('Exam history');
+                console.log(w);
+                console.log(err);
+            }
+
+            try{
+                const options = {
+                        method: 'GET',
+                        url: 'https://twinword-word-graph-dictionary.p.rapidapi.com/difficulty/',
+                        params: {entry: `${w}`},
+                        headers: {
+                            'x-rapidapi-key': '9a0085c5bemshbd923100003a54cp18123bjsn1433795ff3fe',
+                            'x-rapidapi-host': 'twinword-word-graph-dictionary.p.rapidapi.com'
+                        }
+                    };
+                let data = await axios.request(options)
+                
+
+                //let dataMoreDefinition = await responseMoreDefinition.json();
+                console.log(data.data);
+                difficulty.push({word:w, difficulty:data.data.ten_degree});
+            }
+            catch(err){
+                console.log('Difficulty');
+                console.log(w);
+                console.log(err);
+            }
+
+            try{
+                const options = {
+                        method: 'GET',
+                        url: 'https://twinword-word-graph-dictionary.p.rapidapi.com/association/',
+                        params: {entry: `${w}`},
+                        headers: {
+                            'x-rapidapi-key': '9a0085c5bemshbd923100003a54cp18123bjsn1433795ff3fe',
+                            'x-rapidapi-host': 'twinword-word-graph-dictionary.p.rapidapi.com'
+                        }
+                    };
+                let data = await axios.request(options)
+                
+
+                //let dataMoreDefinition = await responseMoreDefinition.json();
+                console.log(data.data);
+                association.push({word:w, association:[...data.data.assoc_word, ...data.data.assoc_word_ex]});
+            }
+            catch(err){
+                console.log('Association');
+                console.log(w);
+                console.log(err);
+            }
+
+            try{
+                const options = {
+                        method: 'GET',
+                        url: 'https://twinword-word-graph-dictionary.p.rapidapi.com/example/',
+                        params: {entry: `${w}`},
+                        headers: {
+                            'x-rapidapi-key': '9a0085c5bemshbd923100003a54cp18123bjsn1433795ff3fe',
+                            'x-rapidapi-host': 'twinword-word-graph-dictionary.p.rapidapi.com'
+                        }
+                    };
+                let data = await axios.request(options)
+                
+
+                //let dataMoreDefinition = await responseMoreDefinition.json();
+                console.log(data.data);
+                moreexample.push({word:w, moreexample: data.data.example});
+            }
+            catch(err){
+                console.log('More example');
                 console.log(w);
                 console.log(err);
             }
@@ -209,10 +339,20 @@ let definition = [];
         console.log(synonym);
         console.log(example);
         console.log(definition);
+        console.log(moredefinition);
+        console.log(examhistory);
+        console.log(difficulty);
+        console.log(association);
+        console.log(moreexample);
         document.querySelector('#antonym').textContent = JSON.stringify(antonym);
         document.querySelector('#synonym').textContent = JSON.stringify(synonym);
         document.querySelector('#example').textContent = JSON.stringify(example);
         document.querySelector('#definition').textContent = JSON.stringify(definition);
+        document.querySelector('#moredefinition').textContent = JSON.stringify(moredefinition);
+        document.querySelector('#examhistory').textContent = JSON.stringify(examhistory);
+        document.querySelector('#difficulty').textContent = JSON.stringify(difficulty);
+        document.querySelector('#association').textContent = JSON.stringify(association);
+        document.querySelector('#moreexample').textContent = JSON.stringify(moreexample);
             
     </script>
 </body>
