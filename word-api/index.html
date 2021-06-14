@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="antonym"></div>
+    <div id="synonym"></div>
+    <div id="example"></div>
+    <div id="definition"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script type="module">
+        let wordArr = ['abhor',
+'abide',
+'abscond',
+'acclaim',
+'accolade',
+'acumen',
+'admonish',
+'adorn',
+'adulteration',
+'adumbrate',
+'affable',
+'aggravate',
+'allegiance',
+'alleviate',
+'amalgamate',
+'ambiguous',
+'ameliorate',
+'anguish',
+'antidote',
+'appease',
+'arrogance',
+'ascend',
+'audacious',
+'braggart',
+'brittle',
+'catalyst',
+'chisel',
+'clientele',
+'combustion',
+'commemorate',
+'complaisant',
+'conceal',
+'conjoin',
+'connote',
+'cryptic',
+'dangle',
+'defer',
+'disallow',
+'divergence',
+'dormant',
+'dote',
+'dullard',
+'dwarf',
+'edible',
+'eloquence',
+'embezzle',
+'encapsulate',
+'endeavor',
+'engulf',
+'entice',
+'eradicate',
+'evoke',
+'extinct',
+'extinguish',
+'fission',
+'fragrant',
+'gait',
+'gallant',
+'gerontocracy',
+'grievous',
+'grumble',
+'heterogeneous',
+'hypocrisy',
+'impermeable',
+'indigenous',
+'infuriate',
+'ingest',
+'inquest',
+'introspect',
+'invincible',
+'judicious',
+'livid',
+'loll',
+'malevolent',
+'massacre',
+'moribund',
+'narcissism',
+'nihilism',
+'odor',
+'offhand',
+'opaque',
+'ossified',
+'poseur',
+'premature',
+'reconcile',
+'reiterate',
+'rejuvenation',
+'relapse',
+'reminiscent',
+'renovate',
+'renown',
+'riddle',
+'sadistic',
+'salvage',
+'sanction',
+'sanity',
+'scribble',
+'shallow',
+'shard',
+'shun',
+'sluggard',
+'sporadic',
+'submerge',
+'succumb',
+'surcharge',
+'tadpole',
+'timid',
+'turmoil',
+'vigorous',
+'yarn'];
+
+let antonym = [];
+let synonym = [];
+let example = [];
+let definition = [];
+        for(let w of wordArr) {
+            // try{
+            //     let response = await fetch(`https://wordsapiv1.p.rapidapi.com/words/${w}/antonyms`, {
+            //         "method": "GET",
+            //         "headers": {
+            //             "x-rapidapi-key": "278506e630mshc066754e29566f9p102f23jsn111b3dad15bc",
+            //             "x-rapidapi-host": "wordsapiv1.p.rapidapi.com"
+            //         }
+            //     });
+            //     let data = await response.json();
+            //     console.log(data);
+            //     antonym.push({word:w, antonym: data.antonyms.join(',')});
+            // }
+            // catch(err){
+            //     console.log('Antonym');
+            //     console.log(w);
+            //     console.log(err);
+            // }
+            
+            // try{
+            //     let responseSyn = await fetch(`https://wordsapiv1.p.rapidapi.com/words/${w}/synonyms`, {
+            //         "method": "GET",
+            //         "headers": {
+            //             "x-rapidapi-key": "278506e630mshc066754e29566f9p102f23jsn111b3dad15bc",
+            //             "x-rapidapi-host": "wordsapiv1.p.rapidapi.com"
+            //         }
+            //     });
+            //     let dataSyn = await responseSyn.json();
+            //     console.log(dataSyn);
+            //     synonym.push({word:w, synonym:dataSyn.synonyms.join(',')});
+            // }
+            // catch(err){
+            //     console.log('Synonym');
+            //     console.log(w);
+            //     console.log(err);
+            // }
+            
+            
+            // try{
+            //     let responseExm = await fetch(`https://wordsapiv1.p.rapidapi.com/words/${w}/examples`, {
+            //         "method": "GET",
+            //         "headers": {
+            //             "x-rapidapi-key": "278506e630mshc066754e29566f9p102f23jsn111b3dad15bc",
+            //             "x-rapidapi-host": "wordsapiv1.p.rapidapi.com"
+            //         }
+            //     });
+            //     let dataExm = await responseExm.json();
+            //     console.log(dataExm);
+            //     example.push({word:w, example:dataExm.examples.join(',')});
+            // }
+            // catch(err){
+            //     console.log('Example');
+            //     console.log(w);
+            //     console.log(err);
+            // }
+            
+            
+            try{
+                let responseExm = await fetch(`https://wordsapiv1.p.rapidapi.com/words/${w}/definitions`, {
+                    "method": "GET",
+                    "headers": {
+                        "x-rapidapi-key": "278506e630mshc066754e29566f9p102f23jsn111b3dad15bc",
+                        "x-rapidapi-host": "wordsapiv1.p.rapidapi.com"
+                    }
+                });
+                let dataDef = await responseExm.json();
+                console.log(dataDef);
+                definition.push({word:w, definition:dataDef.definitions});
+            }
+            catch(err){
+                console.log('Definition');
+                console.log(w);
+                console.log(err);
+            }
+        };
+
+        console.log(antonym);
+        console.log(synonym);
+        console.log(example);
+        console.log(definition);
+        document.querySelector('#antonym').textContent = JSON.stringify(antonym);
+        document.querySelector('#synonym').textContent = JSON.stringify(synonym);
+        document.querySelector('#example').textContent = JSON.stringify(example);
+        document.querySelector('#definition').textContent = JSON.stringify(definition);
+            
+    </script>
+</body>
+</html>
