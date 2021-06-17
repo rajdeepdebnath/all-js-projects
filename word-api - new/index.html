@@ -7,6 +7,8 @@
     <title>Document</title>
 </head>
 <body>
+    <button id="fetch-words" disabled>Fetch words from API</button>
+    <button id="prepare-words">Prepare words</button>
     <div id="antonym"></div>
     <div id="synonym"></div>
     <div id="example"></div>
@@ -16,131 +18,106 @@
     <div id="difficulty"></div>
     <div id="association"></div>
     <div id="moreexample"></div>
+    <div id="preparedwordarray"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="module">
-        let wordArr = ['abhor',
-'abide',
-'abscond',
-'acclaim',
-'accolade',
-'acumen',
-'admonish',
-'adorn',
-'adulteration',
-'adumbrate',
-'affable',
-'aggravate',
-'allegiance',
-'alleviate',
-'amalgamate',
-'ambiguous',
-'ameliorate',
-'anguish',
-'antidote',
-'appease',
-'arrogance',
-'ascend',
-'audacious',
-'braggart',
-'brittle',
-'catalyst',
-'chisel',
-'clientele',
-'combustion',
-'commemorate',
-'complaisant',
-'conceal',
-'conjoin',
-'connote',
-'cryptic',
-'dangle',
-'defer',
-'disallow',
-'divergence',
-'dormant',
-'dote',
-'dullard',
-'dwarf',
-'edible',
-'eloquence',
-'embezzle',
-'encapsulate',
-'endeavor',
-'engulf',
-'entice',
-'eradicate',
-'evoke',
-'extinct',
-'extinguish',
-'fission',
-'fragrant',
-'gait',
-'gallant',
-'gerontocracy',
-'grievous',
-'grumble',
-'heterogeneous',
-'hypocrisy',
-'impermeable',
-'indigenous',
-'infuriate',
-'ingest',
-'inquest',
-'introspect',
-'invincible',
-'judicious',
-'livid',
-'loll',
-'malevolent',
-'massacre',
-'moribund',
-'narcissism',
-'nihilism',
-'odor',
-'offhand',
-'opaque',
-'ossified',
-'poseur',
-'premature',
-'reconcile',
-'reiterate',
-'rejuvenation',
-'relapse',
-'reminiscent',
-'renovate',
-'renown',
-'riddle',
-'sadistic',
-'salvage',
-'sanction',
-'sanity',
-'scribble',
-'shallow',
-'shard',
-'shun',
-'sluggard',
-'sporadic',
-'submerge',
-'succumb',
-'surcharge',
-'tadpole',
-'timid',
-'turmoil',
-'vigorous',
-'yarn'];
+        import words from './raw-data/word.js'
+        import antonym from './raw-data/antonym.js'
+        import association from './raw-data/association.js'
+        import definition from './raw-data/definition.js'
+        import difficulty from './raw-data/difficulty.js'
+        import examhistory from './raw-data/examhistory.js'
+        import example from './raw-data/example.js'
+        import moredefinitions from './raw-data/moredefinitions.js'
+        import moreexample from './raw-data/moreexample.js'
+        import synonym from './raw-data/synonym.js'
+        import { GetRandomOptions } from './utils/helper.js'
 
-let antonym = [];
-let synonym = [];
-let example = [];
-let definition = [];
-let moredefinition = [];
-let examhistory = [];
-let difficulty = [];
-let association = [];
-let moreexample = [];
+        document.querySelector('#prepare-words')
+        .addEventListener('click', () => {
+            // console.log(words);
+            // console.log(synonym);
+            // console.log(antonym);
+            // console.log(association);
+            // console.log(definition);
+            // console.log(difficulty);
+            // console.log(examhistory);
+            // console.log(example);
+            // console.log(moredefinitions);
+            // console.log(moreexample);
 
-        for(let w of wordArr) {
+            let preparedWordArray = [];
+            for(let w of words) {
+                let syn = synonym.find(s => s.word === w);
+                let ant = antonym.find(a => a.word === w);
+                let ass = association.find(ass => ass.word === w);
+                let d = definition.find(d => d.word === w);
+                let di = difficulty.find(di => di.word === w);
+                let eh = examhistory.find(eh => eh.word === w);
+                let ex = example.find(ex => ex.word === w);
+                let moredef = moredefinitions.find(md => md.word === w);
+                let moreex = moreexample.find(mex => mex.word === w);
+
+                let synArr = syn && syn.synonym.trim().length ? syn.synonym.split(",") 
+                                : ass && ass.length ? ass : undefined;
+                
+                let synonym_options4 = [];
+                let synonym_options5 = [];
+                if(synArr){
+                    synonym_options4 = GetRandomOptions(words,3);
+                    synonym_options5 = GetRandomOptions(words,4);
+
+                    synonym_options4.push(...GetRandomOptions(synArr,1));
+                    synonym_options5.push(...GetRandomOptions(synArr,1));
+                }
+                
+                let antoArr = ant && ant.antonym.trim().length ? ant.antonym.split(",") 
+                                : undefined;
+                
+                let antonym_options4 = [];
+                let antonym_options5 = [];
+                if(antoArr){
+                    antonym_options4 = GetRandomOptions(synArr && synArr.length>3 ? synArr : words,3);
+                    antonym_options5 = GetRandomOptions(synArr && synArr.length>4 ? synArr : words,4);
+
+                    antonym_options4.push(...GetRandomOptions(antoArr,1));
+                    antonym_options5.push(...GetRandomOptions(antoArr,1));
+                }
+                
+
+                let preparedWord = {...syn, ...ant, ...ass, ...d, ...di, ...eh
+                    , ...ex, ...moredef, ...moreex, synonym_options4, synonym_options5
+                    , antonym_options4, antonym_options5};
+
+                preparedWordArray.push(preparedWord);
+                //console.log(preparedWord);
+            };
+
+            //console.log(preparedWordArray);
+            //console.log(JSON.stringify(preparedWordArray));
+            document.querySelector('#preparedwordarray').textContent = JSON.stringify(preparedWordArray);
+        });
+
+        document.querySelector('#fetch-words')
+        .addEventListener('click', () => {
+            console.log("Please uncomment the function call and code inside the function.");
+            //fetchWordDetailsFromApi();
+        });
+
+        function fetchWordDetailsFromApi() {
+
+// let antonym = [];
+// let synonym = [];
+// let example = [];
+// let definition = [];
+// let moredefinition = [];
+// let examhistory = [];
+// let difficulty = [];
+// let association = [];
+// let moreexample = [];
+
+        //for(let w of wordArr) {
             // try{
             //     let response = await fetch(`https://wordsapiv1.p.rapidapi.com/words/${w}/antonyms`, {
             //         "method": "GET",
@@ -242,118 +219,118 @@ let moreexample = [];
             // }
 
             
-            try{
-                const options = {
-                        method: 'GET',
-                        url: 'https://twinword-word-graph-dictionary.p.rapidapi.com/examhistory/',
-                        params: {entry: `${w}`},
-                        headers: {
-                            'x-rapidapi-key': '',
-                            'x-rapidapi-host': 'twinword-word-graph-dictionary.p.rapidapi.com'
-                        }
-                    };
-                let data = await axios.request(options)
+            // try{
+            //     const options = {
+            //             method: 'GET',
+            //             url: 'https://twinword-word-graph-dictionary.p.rapidapi.com/examhistory/',
+            //             params: {entry: `${w}`},
+            //             headers: {
+            //                 'x-rapidapi-key': '',
+            //                 'x-rapidapi-host': 'twinword-word-graph-dictionary.p.rapidapi.com'
+            //             }
+            //         };
+            //     let data = await axios.request(options)
                 
 
-                //let dataMoreDefinition = await responseMoreDefinition.json();
-                console.log(data.data);
-                examhistory.push({word:w, examhistory:data.data.exam.join(',')});
-            }
-            catch(err){
-                console.log('Exam history');
-                console.log(w);
-                console.log(err);
-            }
+            //     //let dataMoreDefinition = await responseMoreDefinition.json();
+            //     console.log(data.data);
+            //     examhistory.push({word:w, examhistory:data.data.exam.join(',')});
+            // }
+            // catch(err){
+            //     console.log('Exam history');
+            //     console.log(w);
+            //     console.log(err);
+            // }
 
-            try{
-                const options = {
-                        method: 'GET',
-                        url: 'https://twinword-word-graph-dictionary.p.rapidapi.com/difficulty/',
-                        params: {entry: `${w}`},
-                        headers: {
-                            'x-rapidapi-key': '',
-                            'x-rapidapi-host': 'twinword-word-graph-dictionary.p.rapidapi.com'
-                        }
-                    };
-                let data = await axios.request(options)
+            // try{
+            //     const options = {
+            //             method: 'GET',
+            //             url: 'https://twinword-word-graph-dictionary.p.rapidapi.com/difficulty/',
+            //             params: {entry: `${w}`},
+            //             headers: {
+            //                 'x-rapidapi-key': '',
+            //                 'x-rapidapi-host': 'twinword-word-graph-dictionary.p.rapidapi.com'
+            //             }
+            //         };
+            //     let data = await axios.request(options)
                 
 
-                //let dataMoreDefinition = await responseMoreDefinition.json();
-                console.log(data.data);
-                difficulty.push({word:w, difficulty:data.data.ten_degree});
-            }
-            catch(err){
-                console.log('Difficulty');
-                console.log(w);
-                console.log(err);
-            }
+            //     //let dataMoreDefinition = await responseMoreDefinition.json();
+            //     console.log(data.data);
+            //     difficulty.push({word:w, difficulty:data.data.ten_degree});
+            // }
+            // catch(err){
+            //     console.log('Difficulty');
+            //     console.log(w);
+            //     console.log(err);
+            // }
 
-            try{
-                const options = {
-                        method: 'GET',
-                        url: 'https://twinword-word-graph-dictionary.p.rapidapi.com/association/',
-                        params: {entry: `${w}`},
-                        headers: {
-                            'x-rapidapi-key': '',
-                            'x-rapidapi-host': 'twinword-word-graph-dictionary.p.rapidapi.com'
-                        }
-                    };
-                let data = await axios.request(options)
+            // try{
+            //     const options = {
+            //             method: 'GET',
+            //             url: 'https://twinword-word-graph-dictionary.p.rapidapi.com/association/',
+            //             params: {entry: `${w}`},
+            //             headers: {
+            //                 'x-rapidapi-key': '',
+            //                 'x-rapidapi-host': 'twinword-word-graph-dictionary.p.rapidapi.com'
+            //             }
+            //         };
+            //     let data = await axios.request(options)
                 
 
-                //let dataMoreDefinition = await responseMoreDefinition.json();
-                console.log(data.data);
-                association.push({word:w, association:[...data.data.assoc_word, ...data.data.assoc_word_ex]});
-            }
-            catch(err){
-                console.log('Association');
-                console.log(w);
-                console.log(err);
-            }
+            //     //let dataMoreDefinition = await responseMoreDefinition.json();
+            //     console.log(data.data);
+            //     association.push({word:w, association:[...data.data.assoc_word, ...data.data.assoc_word_ex]});
+            // }
+            // catch(err){
+            //     console.log('Association');
+            //     console.log(w);
+            //     console.log(err);
+            // }
 
-            try{
-                const options = {
-                        method: 'GET',
-                        url: 'https://twinword-word-graph-dictionary.p.rapidapi.com/example/',
-                        params: {entry: `${w}`},
-                        headers: {
-                            'x-rapidapi-key': '',
-                            'x-rapidapi-host': 'twinword-word-graph-dictionary.p.rapidapi.com'
-                        }
-                    };
-                let data = await axios.request(options)
+            // try{
+            //     const options = {
+            //             method: 'GET',
+            //             url: 'https://twinword-word-graph-dictionary.p.rapidapi.com/example/',
+            //             params: {entry: `${w}`},
+            //             headers: {
+            //                 'x-rapidapi-key': '',
+            //                 'x-rapidapi-host': 'twinword-word-graph-dictionary.p.rapidapi.com'
+            //             }
+            //         };
+            //     let data = await axios.request(options)
                 
 
-                //let dataMoreDefinition = await responseMoreDefinition.json();
-                console.log(data.data);
-                moreexample.push({word:w, moreexample: data.data.example});
-            }
-            catch(err){
-                console.log('More example');
-                console.log(w);
-                console.log(err);
-            }
-        };
+            //     //let dataMoreDefinition = await responseMoreDefinition.json();
+            //     console.log(data.data);
+            //     moreexample.push({word:w, moreexample: data.data.example});
+            // }
+            // catch(err){
+            //     console.log('More example');
+            //     console.log(w);
+            //     console.log(err);
+            // }
+        //};
 
-        console.log(antonym);
-        console.log(synonym);
-        console.log(example);
-        console.log(definition);
-        console.log(moredefinition);
-        console.log(examhistory);
-        console.log(difficulty);
-        console.log(association);
-        console.log(moreexample);
-        document.querySelector('#antonym').textContent = JSON.stringify(antonym);
-        document.querySelector('#synonym').textContent = JSON.stringify(synonym);
-        document.querySelector('#example').textContent = JSON.stringify(example);
-        document.querySelector('#definition').textContent = JSON.stringify(definition);
-        document.querySelector('#moredefinition').textContent = JSON.stringify(moredefinition);
-        document.querySelector('#examhistory').textContent = JSON.stringify(examhistory);
-        document.querySelector('#difficulty').textContent = JSON.stringify(difficulty);
-        document.querySelector('#association').textContent = JSON.stringify(association);
-        document.querySelector('#moreexample').textContent = JSON.stringify(moreexample);
-            
+        // console.log(antonym);
+        // console.log(synonym);
+        // console.log(example);
+        // console.log(definition);
+        // console.log(moredefinition);
+        // console.log(examhistory);
+        // console.log(difficulty);
+        // console.log(association);
+        // console.log(moreexample);
+        // document.querySelector('#antonym').textContent = JSON.stringify(antonym);
+        // document.querySelector('#synonym').textContent = JSON.stringify(synonym);
+        // document.querySelector('#example').textContent = JSON.stringify(example);
+        // document.querySelector('#definition').textContent = JSON.stringify(definition);
+        // document.querySelector('#moredefinition').textContent = JSON.stringify(moredefinition);
+        // document.querySelector('#examhistory').textContent = JSON.stringify(examhistory);
+        // document.querySelector('#difficulty').textContent = JSON.stringify(difficulty);
+        // document.querySelector('#association').textContent = JSON.stringify(association);
+        // document.querySelector('#moreexample').textContent = JSON.stringify(moreexample);
+    };
     </script>
 </body>
 </html>
