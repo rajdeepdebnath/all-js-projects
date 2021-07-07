@@ -94,9 +94,14 @@
                 //console.log(preparedWord);
             };
 
+            let wordObj = {};
+            for(let i=0,j=0;i<preparedWordArray.length;i+=10,j++)
+            {
+                wordObj[j] = preparedWordArray.slice(i,i+10)
+            }
             //console.log(preparedWordArray);
             //console.log(JSON.stringify(preparedWordArray));
-            document.querySelector('#preparedwordarray').textContent = JSON.stringify(preparedWordArray);
+            document.querySelector('#preparedwordarray').textContent = JSON.stringify(wordObj);
         });
 
         document.querySelector('#fetch-words')
