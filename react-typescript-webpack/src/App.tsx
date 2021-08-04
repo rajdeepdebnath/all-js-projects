@@ -1,4 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import './style.css'
+import IMAGE from './a.jpg'
 
-ReactDOM.render(<h1>HI</h1>, document.getElementById("root"));
+
+const ele = <>
+<h1>HI</h1>
+<img src={IMAGE}/>
+</>;
+ReactDOM.render(ele, document.getElementById("root"));
